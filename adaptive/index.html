@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GSG Academy</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f6f7fb 0%, #e9ecf4 100%);
+      color: #1d1f23;
+      padding: 24px;
+    }
+    .card {
+      background: #fff;
+      padding: 40px 32px;
+      border-radius: 20px;
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    }
+    .icon {
+      width: 128px;
+      height: 128px;
+      border-radius: 28px;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+      object-fit: cover;
+    }
+    h1 { font-size: 22px; margin: 8px 0 12px; }
+    p { color: #555; line-height: 1.5; margin: 8px 0; }
+    .muted { color: #888; font-size: 13px; margin-top: 20px; }
+    .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid #e3e6ee;
+      border-top-color: #4a6cf7;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="card" id="loading">
+    <div class="spinner"></div>
+    <p class="muted" style="margin-top: 18px;">Opening GSG Academy…</p>
+  </div>
+
+  <div class="card" id="fallback" hidden>
+    <img src="icon.png" alt="GSG Academy" class="icon" />
+    <h1>GSG Academy</h1>
+    <p>We're gradually rolling out globally.</p>
+    <p>The app should be available in your region shortly — thank you for your patience!</p>
+  </div>
+
+  <script>
+    // Fill these in with your real store listings.
+    const CONFIG = {
+      iosUrl:    "https://apps.apple.com/app/idXXXXXXXXXX",
+      androidUrl:"https://play.google.com/store/apps/details?id=co.gsgroup.academy",
+      // Flip this to true once the Android app is live on Google Play.
+      androidAvailable: false,
+    };
+
+    const ua = navigator.userAgent || "";
+    const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+    const isAndroid = /Android/.test(ua);
+
+    function showFallback() {
+      document.getElementById("loading").hidden = true;
+      document.getElementById("fallback").hidden = false;
+    }
+
+    if (isIOS) {
+      window.location.replace(CONFIG.iosUrl);
+    } else if (isAndroid && CONFIG.androidAvailable) {
+      window.location.replace(CONFIG.androidUrl);
+    } else {
+      // Desktop, unsupported OS, or Android before global rollout.
+      showFallback();
+    }
+
+    // Safety net: if redirect is blocked or slow, show the fallback card.
+    setTimeout(showFallback, 2500);
+  </script>
+</body>
+</html>
